@@ -31,6 +31,23 @@ class Trie(list[TrieNode[T]]):
         action: trie에 seq을 저장하기
         """
         # 구현하세요!
-        pass
+        current_index = 0 
+        
+        for elem in seq:
+            found = False
+            for child_index in self[current_index].children:
+                if self[child_index].body == elem:
+                    current_index = child_index  
+                    found = True
+                    break
+            
+            if not found:
+                new_node = TrieNode(body=elem)
+                new_index = len(self)
+                self.append(new_node)
+                self[current_index].children.append(new_index)  
+                current_index = new_index 
+        
+        self[current_index].is_end = True
 
     # 구현하세요!
