@@ -68,9 +68,7 @@ TODO:
 
 def main() -> None:
     # 구현하세요!
-    intify: Callable[[str], int] = lambda l: int(l)
     lines: list[str] = sys.stdin.readlines()
-    n = intify(lines[0])
     words = lines[1:]
 
     trie = Trie()

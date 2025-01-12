@@ -24,17 +24,45 @@ def count(trie: Trie, query_seq: str) -> int:
         if len(trie[pointer].children) > 1 or trie[pointer].is_end:
             cnt += 1
 
-        new_index = None # 구현하세요!
-
+        ### TODO
+        new_index = None 
+        for child_index in trie[pointer].children:
+            if trie[child_index].body == element:
+                new_index = child_index  
+                break
         pointer = new_index
+
 
     return cnt + int(len(trie[0].children) == 1)
 
 
 def main() -> None:
     # 구현하세요!
-    pass
+    while True:
+        n, words = input_data()
+        if n == -1:
+            break
+        trie = Trie()
+        result = 0
 
+        for word in words:
+            trie.push(word)
+        
+        for word in words:
+            result += count(trie, word)
+        print(f"{(result / n):.2f}")
+
+def input_data():
+    '''
+    get inputs from stdin
+    '''
+    try:
+        n = int(input())
+        words = [input().strip() for _ in range(n)]
+        words = [word.encode('ascii') for word in words]
+        return n,words
+    except:
+        return -1,[]
 
 if __name__ == "__main__":
     main()
