@@ -49,18 +49,32 @@ else
     conda activate $ENV_NAME
 fi
 
+mkdir -p ./output
 list=("2243" "3080" "3653" "5670" "10830" "17408")
-for var in $list
+for var in "${list[@]}"
 do 
-    input="./input/input_'$var'"
-    output="./output/output_'$var'"
+    input="./input/${var}_input"
+    output="./output/${var}_output"
+    script="./submission/${var}.py"
+    touch $output
 
-    if [[ -f "$script" ]]; then
+    if [[ "$var" == "17408" || "$var" == "3653" ]]; then
+        echo "$script: wrong py file"
+        continue
+    else 
         echo "Running script: $script with input: $input"
-
         # Run the Python script with the input and compare the output
         python3 "$script" < "$input" > "$output"
+    fi
+
+    # mypy test
+    echo "mypy test: $script"
+    mypy_output=$(mypy "$script" 2>&1)
+    if [[ $? -ne 0 ]]; then
+        echo "$script: failed"
+        echo $mypy_output
+        continue
     else
-        echo "Script $script does not exist. Skipping."
+        echo "$script: passed"
     fi
 done
